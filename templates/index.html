@@ -1,0 +1,28 @@
+<html>
+  <body>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image1" id="uploadimg1" />
+      <label for="uploadimg1">Add First Image</label>
+      <hr />
+      <br />
+      <input type="file" name="image2" id="uploadimg2" />
+      <label for="uploadimg2">Add Second Image</label>
+      <br /><br />
+      <input type="submit" value="Upload" />
+    </form>
+
+    <br /><br />
+    {% if connectedname %}
+    <a href="/morph/{{connectedname}}"><button>Download Morph</button></a>
+    {% else %}
+    <a href="#"><button disabled>Download Morph</button></a>
+    {% endif %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <strong>{{message}}</strong>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </body>
+</html>
