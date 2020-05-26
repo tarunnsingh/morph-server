@@ -76,6 +76,6 @@ def morph(images):
 
 
 if __name__ == '__main__':
-    app.config['SECRET_KEY'] = 'flaskishereandsoismorphing'
+    app.config['SECRET_KEY'] = os.environ.get('SECRET')
     app.debug = True
-    app.run()
+    app.run(threaded = true)
