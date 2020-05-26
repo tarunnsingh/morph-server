@@ -3,7 +3,7 @@ from flask import Flask, flash, request, redirect, url_for, jsonify, render_temp
 from werkzeug.utils import secure_filename
 import cv2
 
-from morph import CreateAffineTransform, CreateControlPoints, CreateTriangle
+from morph import CreateAffineTransform, CreateControlPoints, CreateTriangle, ResizeImage
 
 
 UPLOAD_FOLDER = './uploaded_images'
@@ -55,7 +55,8 @@ def morph(images):
     # USE IMAGE HASHED NAMES IN FUTURE
     image_one_path = os.path.join(app.config['UPLOAD_FOLDER'], images.split("|")[0])
     image_two_path = os.path.join(app.config['UPLOAD_FOLDER'], images.split("|")[1])
-
+    resize_images = ResizeImage(image_one_path, image_two_path)
+    resize_images.resizer()
     image_one = CreateControlPoints(image_one_path)
     image_two = CreateControlPoints(image_two_path)
     image_one_control_pts = image_one.create_control_points()

@@ -17,6 +17,23 @@ def shape_to_np(shape, dtype="int"):
 	return coords
 
 
+class ResizeImage():
+    def __init__(self, image_one_path, image_two_path):
+        self.image_one_path = image_one_path
+        self.image_two_path = image_two_path
+        self.img1 = cv2.imread(image_one_path)
+        self.img2 = cv2.imread(image_two_path)
+
+    def resizer(self):
+        min_ht = min(self.img1.shape[0], self.img2.shape[0])
+        min_wd = min(self.img1.shape[1], self.img2.shape[1])
+        dims = (min_wd, min_ht)
+        self.img1 = cv2.resize(self.img1, dims, interpolation=cv2.INTER_AREA)
+        self.img2 = cv2.resize(self.img2, dims, interpolation=cv2.INTER_AREA)
+        print("Resized Dims: ", self.img1.shape, self.img2.shape)
+        cv2.imwrite(self.image_one_path, self.img1)
+        cv2.imwrite(self.image_two_path, self.img2)
+
 class CreateControlPoints():
     def __init__(self, img):
         self.img = img
