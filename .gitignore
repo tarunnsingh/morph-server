@@ -4,4 +4,3 @@ output_gif/
 morph_frames/
 __pycache__
 .vscode
-shape_predictor_68_face_landmarks.dat
