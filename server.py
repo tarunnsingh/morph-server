@@ -7,13 +7,20 @@ from morph import CreateAffineTransform, CreateControlPoints, CreateTriangle
 
 
 UPLOAD_FOLDER = './uploaded_images'
-MORPH_FOLDER = './output_gif'
+OUTPUT_FOLDER = './output_gif'
+MORPH_FRAMES = './morph_frames'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MORPH_FOLDER'] = MORPH_FOLDER
+app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
+if not os.path.isdir(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
+if not os.path.isdir(OUTPUT_FOLDER):
+    os.mkdir(OUTPUT_FOLDER)
+if not os.path.isdir(MORPH_FRAMES):
+    os.mkdir(MORPH_FRAMES)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -61,7 +68,7 @@ def morph(images):
     flash('Applied Affine Transform.', category='info')
     try:
         flash('Downloading Now...', category='info')
-        return send_from_directory(app.config["MORPH_FOLDER"], filename= 'morphed.gif', as_attachment=True)
+        return send_from_directory(app.config["OUTPUT_FOLDER"], filename= 'morphed.gif', as_attachment=True)
     except (FileNotFoundError):
         abort(404)
 
