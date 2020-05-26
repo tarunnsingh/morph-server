@@ -34,34 +34,21 @@ def home_page():
 @app.route('/api/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        if (('image1' not in request.files) or ('image2' not in request.files)):
-            print("Both Files not Attatched")
+        print(request.files)
+        if ('singleimage' not in request.files):
+            print("File not attatched!")
             return jsonify({"File(s) attached": False})
-        file1 = request.files['image1']
-        file2 = request.files['image2']
-        if file1.filename == '' or file2.filename == '':
-            print("File Name(s) are empty.")
+        file = request.files['singleimage']
+        if file.filename == '':
+            print("File Name is empty.")
             return jsonify({"filename(s)": None})
-        if (file1 and allowed_file(file1.filename) and file2 and allowed_file(file2.filename)):
-            filename1 = secure_filename(file1.filename)
-            filename2 = secure_filename(file2.filename)
-            file1.save(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
-            file2.save(os.path.join(app.config['UPLOAD_FOLDER'], filename2))
+        if (file and allowed_file(file.filename)):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('Files Uploaded', category='info')
-            connectedname = filename1 + "|" + filename2
             print("Both Files saved to Server")
-            return render_template("index.html", connectedname = connectedname)
-
-# @app.route('/api/upload', methods=['GET', 'POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#             file = request.files['filepond']
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             connectedname = filename
-#             print("Both Files saved to Server")
-#             return render_template("index.html", connectedname = connectedname)
-
+            return jsonify({"Image Uploaded" : filename})
+            
 
 @app.route('/api/morph/<images>', methods=['GET'])
 def morph(images):
