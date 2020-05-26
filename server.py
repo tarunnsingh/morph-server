@@ -26,19 +26,21 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api', methods=['GET'])
 def home_page():
     return render_template("index.html")
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/api/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if (('image1' not in request.files) or ('image2' not in request.files)):
+            print("Both Files not Attatched")
             return jsonify({"File(s) attached": False})
         file1 = request.files['image1']
         file2 = request.files['image2']
         if file1.filename == '' or file2.filename == '':
+            print("File Name(s) are empty.")
             return jsonify({"filename(s)": None})
         if (file1 and allowed_file(file1.filename) and file2 and allowed_file(file2.filename)):
             filename1 = secure_filename(file1.filename)
@@ -47,10 +49,21 @@ def upload_file():
             file2.save(os.path.join(app.config['UPLOAD_FOLDER'], filename2))
             flash('Files Uploaded', category='info')
             connectedname = filename1 + "|" + filename2
+            print("Both Files saved to Server")
             return render_template("index.html", connectedname = connectedname)
 
+# @app.route('/api/upload', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#             file = request.files['filepond']
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             connectedname = filename
+#             print("Both Files saved to Server")
+#             return render_template("index.html", connectedname = connectedname)
 
-@app.route('/morph/<images>', methods=['GET'])
+
+@app.route('/api/morph/<images>', methods=['GET'])
 def morph(images):
     # USE IMAGE HASHED NAMES IN FUTURE
     image_one_path = os.path.join(app.config['UPLOAD_FOLDER'], images.split("|")[0])
