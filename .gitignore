@@ -1,6 +1,6 @@
 env/
-uploaded_images/
-output_gif/
-morph_frames/
+static/uploaded_images/
+static/output_gif/
+static/morph_frames/
 __pycache__
 .vscode

@@ -6,9 +6,9 @@ import cv2
 from morph import CreateAffineTransform, CreateControlPoints, CreateTriangle, ResizeImage
 
 
-UPLOAD_FOLDER = './uploaded_images'
-OUTPUT_FOLDER = './output_gif'
-MORPH_FRAMES = './morph_frames'
+UPLOAD_FOLDER = './static/uploaded_images'
+OUTPUT_FOLDER = './static/output_gif'
+MORPH_FRAMES = './static/morph_frames'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)

@@ -177,13 +177,13 @@ class CreateAffineTransform():
             # Display Result
             # cv2.imshow("Morphed Face", np.uint8(imgMorph))
             x = i + 100
-            frame = './morph_frames/' + "frame_" + str(x) + ".jpg"
+            frame = './static/morph_frames/' + "frame_" + str(x) + ".jpg"
             cv2.imwrite(frame, (imgMorph))
     
         images = []
-        filenames = glob.glob("./morph_frames/" + "*.jpg")
+        filenames = glob.glob("./static/morph_frames/" + "*.jpg")
         # print(filenames)
         for filename in filenames:
             images.append(imageio.imread(filename))
-        imageio.mimsave("./output_gif/morphed.gif", images)
+        imageio.mimsave("./static/output_gif/morphed.gif", images)
         print("GIF Created and SAVED!")
