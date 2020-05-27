@@ -46,7 +46,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('Files Uploaded', category='info')
-            print("Both Files saved to Server")
+            print("File saved to Server...")
             return jsonify({"Image Uploaded" : filename})
             
 
@@ -69,6 +69,7 @@ def morph(images):
     flash('Applied Affine Transform.', category='info')
     try:
         flash('Downloading Now...', category='info')
+        print("GIF Created, Initiating Download...")
         return send_from_directory(app.config["OUTPUT_FOLDER"], filename= 'morphed.gif', as_attachment=True)
     except (FileNotFoundError):
         abort(404)
