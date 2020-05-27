@@ -1,3 +1,7 @@
+<video width="100%">
+  <source src="Sample.mp4" type="video/mp4">
+</video>
+
 ## Face Morphing (Server Side Script)
 ### Uses DLIB and OpenCV
 
