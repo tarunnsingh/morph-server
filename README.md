@@ -1,6 +1,4 @@
-<video width="100%">
-  <source src="Sample.mp4" type="video/mp4">
-</video>
+<img src="https://cdn.dribbble.com/users/470545/screenshots/2153975/face-morphing.gif" width="300"/>
 
 ## Face Morphing (Server Side Script)
 ### Uses DLIB and OpenCV
