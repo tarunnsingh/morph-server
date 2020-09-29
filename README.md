@@ -1,6 +1,9 @@
 <img src="https://cdn.dribbble.com/users/470545/screenshots/2153975/face-morphing.gif" width="300"/>
 
-## Face Morphing (Server Side Script)
+## Face Morphing (Server Side Script) - See Client Side [Here](https://github.com/tarunnsingh/morph-client).
+## Project Demo 
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/_ThVHciEj4g/0.jpg)](http://www.youtube.com/watch?v=_ThVHciEj4g)
+
 ### Uses DLIB and OpenCV
 
 ### Steps for Local Deployment:
