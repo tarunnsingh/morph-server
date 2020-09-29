@@ -4,6 +4,9 @@
 ## Project Demo 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/_ThVHciEj4g/0.jpg)](http://www.youtube.com/watch?v=_ThVHciEj4g)
 
+### What is Morphing?
+The face morphing algorithm morphs between faces using a common set of feature points, placed by hand on each face. To morph between two faces, you need to warp both faces to a common shape so they can be blended together.
+
 ### Uses DLIB and OpenCV
 
 ### Steps for Local Deployment:
