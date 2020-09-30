@@ -31,3 +31,4 @@ This is Flask based API Server, manages the two API Endpoints namely: **POST** `
 Check and put up Issues and let me know the features which you wish to add before making a PR.
 
 ### Leave a :star: if you found this helpful.
+###Also follow me on github
