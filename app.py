@@ -120,6 +120,6 @@ def morph(images):
 
 
 if __name__ == '__main__':
-    app.config['SECRET_KEY'] = 'hyjygjgj'
+    app.config['SECRET_KEY'] = app.config['SECRET_KEY'] = os.environ.get('SECRET') or 'hyjygjgj'
     app.debug = True
     app.run(threaded = True)
