@@ -3,11 +3,11 @@ from imutils import face_utils
 import numpy as np
 import imutils
 import dlib
-from PIL import Image
 import imageio
 import sys
 from delaunaytri import DelaunayTriangulation
 import glob
+from PIL import Image
 
 
 def shape_to_np(shape, dtype="int"):
@@ -18,43 +18,50 @@ def shape_to_np(shape, dtype="int"):
 
 
 class ResizeImage():
-    def __init__(self, image_one_path, image_two_path):
-        self.image_one_path = image_one_path
-        self.image_two_path = image_two_path
-        self.img1 = cv2.imread(image_one_path)
-        self.img2 = cv2.imread(image_two_path)
+    def __init__(self, img1, img2):
+        self.img1 = img1
+        self.img2 = img2
 
     def resizer(self):
         min_ht = min(self.img1.shape[0], self.img2.shape[0])
         min_wd = min(self.img1.shape[1], self.img2.shape[1])
-        dims = (min_wd, min_ht)
+        dims = (min_wd, min_ht);
         self.img1 = cv2.resize(self.img1, dims, interpolation=cv2.INTER_AREA)
         self.img2 = cv2.resize(self.img2, dims, interpolation=cv2.INTER_AREA)
         print("Resized Dims: ", self.img1.shape, self.img2.shape)
-        cv2.imwrite(self.image_one_path, self.img1)
-        cv2.imwrite(self.image_two_path, self.img2)
+
+        img_one_bin = cv2.imencode('.jpg', self.img1)[1]
+        img_two_bin = cv2.imencode('.jpg', self.img2)[1]
+
+        from app import db, IMAGES
+
+        s = IMAGES.query.order_by(IMAGES.ID.desc()).first()
+        s.IMAGE1 = img_one_bin
+        s.IMAGE2 = img_two_bin
+        db.session.flush()
+        db.session.commit()
 
 class CreateControlPoints():
     def __init__(self, img):
         self.img = img
 
 
-    def create_control_points(self):  
+    def create_control_points(self):
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
-        self.image = cv2.imread(self.img)
+        self.image = self.img
         # image = imutils.resize(self.image, width=500)
         gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         rects = detector(gray, 1)
         for (i, rect) in enumerate(rects):
             shape = predictor(gray, rect)
             shape = face_utils.shape_to_np(shape)
-            
+
             if type(shape) != None:
                 corner_pts = [
-                                [0, 0], 
-                                [self.image.shape[1] - 1, self.image.shape[0] - 1], 
-                                [self.image.shape[1] - 1,  0], 
+                                [0, 0],
+                                [self.image.shape[1] - 1, self.image.shape[0] - 1],
+                                [self.image.shape[1] - 1,  0],
                                 [0, self.image.shape[0] - 1]
                             ]
 
@@ -89,11 +96,10 @@ class CreateTriangle():
         return(dt_tris)
 
 class CreateAffineTransform():
-
     def __init__(self, dt_tris, img1, img2, coord1, coord2):
         self.dt_tris = dt_tris
-        self.img1 = np.float32(cv2.imread(img1))
-        self.img2 = np.float32(cv2.imread(img2))
+        self.img1 = np.float32(img1)
+        self.img2 = np.float32(img2)
         self.coord1 = coord1
         self.coord2 = coord2
 
@@ -148,6 +154,8 @@ class CreateAffineTransform():
         )
 
     def perform_affine_transform(self, factor = 40):
+        images = []
+
         for i in range(0, factor):
             alpha = i / factor
             # print(alpha)
@@ -176,14 +184,15 @@ class CreateAffineTransform():
 
             # Display Result
             # cv2.imshow("Morphed Face", np.uint8(imgMorph))
-            x = i + 100
-            frame = './static/morph_frames/' + "frame_" + str(x) + ".jpg"
-            cv2.imwrite(frame, (imgMorph))
-    
-        images = []
-        filenames = glob.glob("./static/morph_frames/" + "*.jpg")
+            _ , buffer = cv2.imencode( '.jpg', imgMorph)
+            images.append(imageio.imread(buffer.tobytes()))
+
         # print(filenames)
-        for filename in filenames:
-            images.append(imageio.imread(filename))
         imageio.mimsave("./static/output_gif/morphed.gif", images)
-        print("GIF Created and SAVED!")
+
+        from app import db, IMAGES
+        s = IMAGES.query.order_by(IMAGES.ID.desc()).first()
+        s.GIF = np.array(images).tobytes()
+        db.session.flush()
+        db.session.commit()
+        # print("GIF Created and SAVED!")
