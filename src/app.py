@@ -1,9 +1,11 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, jsonify, render_template, session, send_file, send_from_directory, safe_join, abort
+from flask import Flask, flash, request, redirect, url_for, jsonify, json,\
+    render_template, session, send_file, send_from_directory, safe_join, abort
 from werkzeug.utils import secure_filename
 import cv2
 import numpy as np
 from flask_sqlalchemy import SQLAlchemy
+from uptime import uptime
 
 from morph import CreateAffineTransform, CreateControlPoints, CreateTriangle, ResizeImage
 
@@ -53,6 +55,17 @@ def image_query():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# health enpoint to check if all the ibraries are loded correctly
+@app.route('/health', methods=['GET'])
+def health():
+    # dictionary with different stats can be updated
+    data = {"uptime": uptime()}
+    response = app.response_class(
+        response=json.dumps(data),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 @app.route('/api', methods=['GET'])
 def home_page():
@@ -120,6 +133,8 @@ def morph(images):
 
 
 if __name__ == '__main__':
+    HOST = os.environ.get('HOST') or "0.0.0.0"
+    PORT = os.environ.get('PORT') or '5000'
     app.config['SECRET_KEY'] = os.environ.get('SECRET') or 'hyjygjgj'
     app.debug = True
-    app.run(threaded = True)
+    app.run(threaded=True, host=HOST, port=PORT)
