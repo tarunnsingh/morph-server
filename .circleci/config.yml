@@ -5,12 +5,12 @@ orbs:
 
 jobs:
     morph-server-image-build:
-    executor: python/default
-    steps:
-      - checkout
-      - run:
-          name: Build Morph Server
-          command: make morph-server-build
+      machine: true
+      steps:
+        - checkout
+        - run:
+            name: Build Morph Server
+            command: make morph-server-build
 
 workflows:
   main:
