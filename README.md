@@ -30,12 +30,6 @@ This is Flask based API Server, manages the two API Endpoints namely: **POST** `
 
 ### Important Note: As of now, use pip version 9.0.1 for properly installing all the dependencies.
 
-4. Create a new virtual environment by `py -m venv env`.
-5. Activate the environment by `env\Scripts\activate`.
-6. Install the packages by `pip install -r requirements.txt`
-7. Start the server by `python app.py`.
-
-
 ### Note: The Server will run on http://localhost:5000, don't forget to add a proxy of this URL in your client side script.
 
 ### Contribute
