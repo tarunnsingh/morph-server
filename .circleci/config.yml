@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+    morph-server-image-build:
+      machine: true
+      steps:
+        - checkout
+        - run:
+            name: Build Morph Server
+            command: make morph-server-build
+
+workflows:
+  main:
+    jobs:
+      - morph-server-image-build
