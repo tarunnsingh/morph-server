@@ -1,5 +1,5 @@
 dlib==19.21.0
-Flask==1.1.2
+Flask==2.3.2
 Flask-SQLAlchemy==2.4.4
 imageio==2.8.0
 imutils==0.5.3
